@@ -1,11 +1,3 @@
 bin/
 obj/
 *.o
-src/builtins.c
-src/parsers.c
-src/executor.c
-src/utils.c
-include/builtins.h
-include/parsers.h
-include/executor.h
-include/utils.h
