@@ -45,9 +45,11 @@ Make sure you have the following installed:
 - `libreadline` (for history & arrow support)
 
 ---
+```
 
 ### 🐧 For Linux (Ubuntu/Debian):
 
 ```bash
 sudo apt update
 sudo apt install -y build-essential libreadline-dev
+```
