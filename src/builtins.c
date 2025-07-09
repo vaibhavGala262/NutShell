@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "builtins.h"
+#include "history.h"
 
 int handle_builtin(char **args) {
     if (args[0] == NULL) return 0;
@@ -17,6 +18,12 @@ int handle_builtin(char **args) {
         }
         return 1;
     }
+
+    if (strcmp(args[0], "history") == 0) {
+    print_history();
+    return 1;
+}
+
 
     if (strcmp(args[0], "clearscreen") == 0) {
         system("clear");

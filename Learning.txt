@@ -1,0 +1,10 @@
+strtok vs strtok_r  
+strtok visual time line
+1. main(): strtok(input, ";")           → returns "ls " 
+   Internal state: "remember position after first ;"
+
+2. parse_input(): strtok(cmd_copy, " ") → returns "ls", then NULL
+   Internal state: "OVERWRITTEN - now tracking space parsing"
+
+3. main(): strtok(NULL, ";")           → returns NULL (state corrupted!)
+   Should have returned " whoami" but internal state was lost
