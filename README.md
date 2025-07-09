@@ -32,3 +32,19 @@ cd NutShell
 
 # Build it
 make run
+
+### ✅ Requirements
+
+Make sure you have the following installed:
+
+- `gcc` (GNU Compiler)
+- `make`
+- `libreadline` (for history & arrow support)
+
+---
+
+### 🐧 For Linux (Ubuntu/Debian):
+
+```bash
+sudo apt update
+sudo apt install -y build-essential libreadline-dev
