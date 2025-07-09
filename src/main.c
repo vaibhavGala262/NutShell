@@ -1,36 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "builtins.h"
 #include "parsers.h"
 #include "executor.h"
 #include "history.h"
 
-
 #define MAX_CMD_LEN 1024
 
-
-
-
-
-
 int main() {
-    char input[MAX_CMD_LEN];
-
-     
+    char *input;
+    
+    // Initialize readline - enable tab completion
+    rl_bind_key('\t', rl_complete);
+    
     while (1) {
-        printf("nutshell> ");
-        fflush(stdout);
+        // readline handles history automatically with up/down arrows
+        input = readline("nutshell> ");
         
-        if (fgets(input, sizeof(input), stdin) == NULL) {
+        // Check for EOF (Ctrl+D)
+        if (input == NULL) {
             printf("\n");
             break;
         }
         
-        input[strcspn(input, "\n")] = 0;
-        if (strlen(input) > 0) {
-            add_to_history(input);
-}
+        // Skip empty lines
+        if (strlen(input) == 0) {
+            free(input);
+            continue;
+        }
+        
+        // Add to both readline history and your custom history
+        add_history(input);        // readline's built-in history
+        add_to_history(input);     // your custom history function
         
         // Use strtok_r instead of strtok to avoid interference with parse_input
         char *saveptr_main;
@@ -45,6 +49,8 @@ int main() {
             // Parse individual command
             char cmd_copy[MAX_CMD_LEN];
             strncpy(cmd_copy, cmd, MAX_CMD_LEN);
+            cmd_copy[MAX_CMD_LEN - 1] = '\0';  // Ensure null termination
+            
             printf("[Shell] Next command: %s\n", cmd);
             
             parse_input(cmd_copy, args);
@@ -63,6 +69,9 @@ int main() {
             
             cmd = strtok_r(NULL, ";", &saveptr_main);
         }
+        
+        // IMPORTANT: Free the input allocated by readline
+        free(input);
     }
     
     return 0;
