@@ -33,9 +33,11 @@ cd NutShell
 # Build it
 make run
 
+```
 
 ## ✅ Requirements
 
+```bash
 Make sure you have the following installed:
 
 - `gcc` (GNU Compiler)
