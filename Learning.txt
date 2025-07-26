@@ -8,3 +8,13 @@ strtok visual time line
 
 3. main(): strtok(NULL, ";")           → returns NULL (state corrupted!)
    Should have returned " whoami" but internal state was lost
+
+
+
+Structure  :
+
+[ GUI Window (Terminal emulator) ]
+           ↓ launches
+[ Shell Program (CLI like bash/zsh) ]
+           ↓ executes
+[ OS system calls / programs ]
