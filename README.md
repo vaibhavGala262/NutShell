@@ -42,7 +42,7 @@ Whether you're a developer looking for a customizable shell or a student studyin
 
 ### ⚡ Advanced Capabilities
 - **Logical Operators** - Conditional execution with `&&` (AND) and `||` (OR)
-- **Variable System** - Set, expand, and export variables (`name="John" && echo "Hello $name"`)
+- **Variable System** - Set, expand, and export variables (`name="John" && echo "Hello @name"`)
 - **Built-in Commands** - `cdir`, `pcd`, `env`, `set`, `export`, `unset`, `history`, `debug`, `exit`
 - **Signal Handling** - Graceful exit on Ctrl+C, Ctrl+D with proper cleanup
 - **Customizable Prompts** - Colored, informative prompts showing current directory
