@@ -354,3 +354,38 @@ int get_command_exit_status(char **args, int is_background) {
     }
 }
 
+
+int execute_external_command_with_status(char **args, int is_background) {
+    pid_t pid = fork();
+    
+    if (pid < 0) {
+        DEBUG_ERROR("Fork failed");
+        return 1;  // Return failure status
+    }
+    
+    if (pid == 0) {
+        // Child process
+        for (int i = 1; i < 32; i++) {
+            signal(i, SIG_DFL);
+        }
+        
+        execvp(args[0], args);
+        DEBUG_ERROR("execvp failed");
+        _exit(127);  // Command not found
+    } else {
+        // Parent process
+        if (!is_background) {
+            int status;
+            waitpid(pid, &status, 0);
+            
+            if (WIFEXITED(status)) {
+                return WEXITSTATUS(status);  // Return actual exit code
+            } else {
+                return 1;  // Command terminated abnormally
+            }
+        } else {
+            printf("[Background job] PID: %d\n", pid);
+            return 0;  // Background jobs always "succeed" for chaining
+        }
+    }
+}

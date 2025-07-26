@@ -11,6 +11,7 @@ strtok visual time line
 
 
 
+<--- Black Screen != Shell --->
 Structure  :
 
 [ GUI Window (Terminal emulator) ]
