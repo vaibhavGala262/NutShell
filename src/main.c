@@ -198,7 +198,6 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        // Add to both readline history and your custom history
         add_history(input);    // readline's built-in history function
         add_to_history(input); // my custom history function
 
@@ -214,83 +213,58 @@ int main(int argc, char *argv[])
 
         // Execute commands, grouping them into pipelines
      
-        int i = 0;
-        while (i < cmd_list.count)
-        {
-            // Find pipeline 
-            int pipeline_start = i;
-            int pipeline_end = i;
-            int is_background = 0;
+       // Execute commands with logical operator support
+int last_exit_status = 0;  // Track the exit status of the last command
 
-           
-            while (pipeline_end < cmd_list.count - 1)
-            {
-                // Check if current command is followed by a pipe
-              
-                break;
-            }
-
-            // Check if the last command in pipeline is background
-            if (pipeline_end < cmd_list.count && cmd_list.commands[pipeline_end].is_background)
-            {
-                is_background = 1;
-            }
-
-            int pipeline_length = pipeline_end - pipeline_start + 1;
-
-            DEBUG_INFO("Command list count: %d\n", cmd_list.count);
-            DEBUG_INFO("Pipeline start: %d, end: %d, length: %d\n", pipeline_start, pipeline_end, pipeline_length);
-
-            if (pipeline_start < cmd_list.count && cmd_list.commands[pipeline_start].args[0])
-            {
-                DEBUG_VERBOSE("Command 0: '%s'\n", cmd_list.commands[pipeline_start].args[0]);
-            }
-            else
-            {
-                DEBUG_ERROR("Command 0: NULL or invalid\n");
-            }
-
-            // Skip empty commands
-            if (pipeline_start >= cmd_list.count || cmd_list.commands[pipeline_start].args[0] == NULL)
-            {
-                i = pipeline_end + 1;
-                continue;
-            }
-
-            DEBUG_INFO("About to execute commands\n");
-            DEBUG_INFO("Checking if '%s' is built-in\n", cmd_list.commands[pipeline_start].args[0]);
-
-            // Check if it's a built-in command
-            if (pipeline_length == 1)
-            {
-                // Check if command has redirections
-                if (cmd_list.commands[pipeline_start].redirect_count > 0)
-                {
-                    // Execute with redirections (works for both built-ins and external commands , note normal execution did not work for both)
-                    execute_command_with_redirections(&cmd_list.commands[pipeline_start]);
-                }
-                else
-                {
-                    // No redirections so , check if built-in
-                    if (handle_builtin(cmd_list.commands[pipeline_start].args))
-                    {
-                        // Built-in handled without redir
-                    }
-                    else
-                    {
-                        // External command without redir
-                        execute_command(cmd_list.commands[pipeline_start].args, is_background);
-                    }
-                }
-            }
-        else
-    {
-        DEBUG_INFO("Executing pipeline with %d commands\n", pipeline_length);
-        // Pipeline with potential redirections
-        execute_pipeline(&cmd_list.commands[pipeline_start], pipeline_length, is_background);
+for (int i = 0; i < cmd_list.count; i++) {
+    command_t *cmd = &cmd_list.commands[i];
+    
+    // Skip empty commands
+    if (cmd->args[0] == NULL) {
+        continue;
     }
-
-    i = pipeline_end + 1;
+    
+    // Determine if we should execute this command based on previous result
+    int should_execute = 1;
+    
+    if (i > 0) {
+        // Check the operator from the previous command
+        operator_type_t prev_operator = cmd_list.commands[i-1].next_operator;
+        
+        if (prev_operator == OP_AND) {
+            // && : Execute only if previous command succeeded (exit status 0)
+            should_execute = (last_exit_status == 0);
+            DEBUG_INFO("&& operator: last_status=%d, executing=%s", 
+                      last_exit_status, should_execute ? "yes" : "no");
+        } else if (prev_operator == OP_OR) {
+            // || : Execute only if previous command failed (exit status != 0)
+            should_execute = (last_exit_status != 0);
+            DEBUG_INFO("|| operator: last_status=%d, executing=%s", 
+                      last_exit_status, should_execute ? "yes" : "no");
+        }
+        // For OP_SEMICOLON, OP_PIPE, OP_NONE - always execute (should_execute stays 1)
+    }
+    
+    if (should_execute) {
+        DEBUG_INFO("Executing: %s", cmd->args[0]);
+        
+        // Check if it's a built-in command with your existing logic
+        if (cmd->redirect_count > 0) {
+            // Execute with redirections
+            execute_command_with_redirections(cmd);
+            last_exit_status = 0;  // Assume success for redirected commands
+        } else if (handle_builtin(cmd->args)) {
+            // Built-in command executed
+            last_exit_status = 0;  // Built-ins assume success
+        } else {
+            // Execute external command and capture exit status
+            last_exit_status = execute_external_command_with_status(cmd->args, cmd->is_background);
+        }
+        
+        DEBUG_INFO("Command '%s' exited with status: %d", cmd->args[0], last_exit_status);
+    } else {
+        DEBUG_INFO("Skipping: %s (condition not met)", cmd->args[0]);
+    }
 }
 
 free_command_list(&cmd_list);
