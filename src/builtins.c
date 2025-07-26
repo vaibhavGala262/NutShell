@@ -184,7 +184,7 @@ int handle_builtin(char **args)
     
     int count = 0;
     for (int i = 0; environ[i]; i++) {
-        DEBUG_VERBOSE("%s\n", environ[i]);
+        printf("%s\n", environ[i]);
         count++;
         
         if (count > 200) {  // Safety break
