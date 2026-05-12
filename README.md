@@ -20,7 +20,6 @@
 NutShell is a custom Unix-like shell that combines the power of traditional shells like Bash with modern features and a clean codebase. It's designed for both interactive use and scripting, with a focus on robustness, debuggability, and ease of extension.
 
 **Why NutShell?**
-- 🚀 **High Performance** - Written in C for maximum efficiency
 - 🔧 **Highly Configurable** - Runtime debug levels and customizable prompts
 - 🧩 **Modular Design** - Clean separation of parsing, execution, and I/O
 - 🛡️ **Memory Safe** - Rigorous memory management and leak prevention
@@ -71,7 +70,7 @@ Whether you're a developer looking for a customizable shell or a student studyin
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/nutshell.git
+git clone https://github.com/vaibhavGala262/Nutshell.git
 cd nutshell
 
 # 2. Install dependencies (Ubuntu/Debian)
@@ -135,6 +134,25 @@ That will create a GitHub Release and attach a Linux binary named like:
 nutshell-linux-x86_64
 ```
 
+### Download Without Opening Releases
+
+You can fetch the latest binary directly with the GitHub CLI:
+
+```bash
+gh release download --repo vaibhavGala262/Nutshell -p "nutshell-linux-*"
+chmod +x nutshell-linux-*
+./nutshell-linux-*
+```
+
+Or use a direct URL for a specific version:
+
+```bash
+curl -L -o nutshell-linux-x86_64 \
+	https://github.com/vaibhavGala262/Nutshell/releases/download/v1.0.0/nutshell-linux-x86_64
+chmod +x nutshell-linux-x86_64
+./nutshell-linux-x86_64
+```
+
 <details>
 <summary>🍎 <strong>macOS (Homebrew)</strong></summary>
 
@@ -157,8 +175,6 @@ sudo apt install gcc make libreadline-dev git
 ---
 
 ## 🚀 Usage
-
-### Basic Commands
 ```bash
 nutshell> ls -la           # List files with details
 nutshell> pwd/pcd             # Print working directory  
@@ -297,7 +313,7 @@ We welcome contributions! Here's how to get started:
 
 ### Development Setup
 ```bash
-git clone https://github.com/yourusername/nutshell.git
+git clone https://github.com/vaibhavGala262/Nutshell.git
 cd nutshell
 make run-debug   # Build with debug symbols
 make run-verbose # For detailed debugging 
@@ -327,8 +343,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **Built with passion for systems programming**  
 *Crack open a new shell experience! 🥜*
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/nutshell.svg?style=social&label=Star)](https://github.com/yourusername/nutshell)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/nutshell.svg?style=social&label=Fork)](https://github.com/yourusername/nutshell/fork)
+[![GitHub stars](https://img.shields.io/github/stars/vaibhavGala262/Nutshell.svg?style=social&label=Star)](https://github.com/vaibhavGala262/Nutshell)
+[![GitHub forks](https://img.shields.io/github/forks/vaibhavGala262/Nutshell.svg?style=social&label=Fork)](https://github.com/vaibhavGala262/Nutshell/fork)
 
 [⬆ Back to Top](#-nutshell---a-feature-rich-unix-shell)
 
