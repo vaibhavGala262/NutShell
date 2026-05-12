@@ -18,6 +18,10 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 # Output executable
 TARGET = $(BIN_DIR)/nutshell
 
+# Install locations
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+
 # =================================================================
 # SEPARATE BUILD TARGETS - Different Build Configurations
 # =================================================================
@@ -99,6 +103,22 @@ clean-build:
 # Full clean
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+# =================================================================
+# INSTALL TARGETS - System-wide installation support
+# =================================================================
+
+.PHONY: install uninstall
+install: release
+	@echo "Installing $(TARGET) to $(DESTDIR)$(BINDIR)/nutshell..."
+	mkdir -p $(DESTDIR)$(BINDIR)
+	install -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)/nutshell
+	@echo "Install complete. Run: nutshell"
+
+uninstall:
+	@echo "Removing $(DESTDIR)$(BINDIR)/nutshell..."
+	rm -f $(DESTDIR)$(BINDIR)/nutshell
+	@echo "Uninstall complete."
 
 # =================================================================
 # RUN TARGETS - Run with different configurations

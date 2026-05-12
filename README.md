@@ -82,6 +82,26 @@ make release
 
 # 4. Run NutShell
 ./bin/nutshell
+
+# 5. (Optional) Install system-wide
+sudo make install
+
+# 6. (Optional) Uninstall
+sudo make uninstall
+```
+
+### Install Paths
+
+By default, `make install` places the binary in `/usr/local/bin/nutshell`.
+
+You can override paths using standard variables:
+
+```bash
+# Install to a custom prefix (e.g., /opt/nutshell)
+sudo make install PREFIX=/opt/nutshell
+
+# Package-friendly staging (for .deb/.rpm builds)
+make install DESTDIR=/tmp/pkg-root
 ```
 
 ### Platform-Specific Instructions
@@ -94,6 +114,26 @@ sudo apt update
 sudo apt install gcc make libreadline-dev git
 ```
 </details>
+
+---
+
+## 📤 Binary Releases (Linux)
+
+This repo includes a GitHub Actions workflow that builds a Linux binary on tag push.
+
+### Create a Release
+
+```bash
+# Tag a version and push
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+That will create a GitHub Release and attach a Linux binary named like:
+
+```
+nutshell-linux-x86_64
+```
 
 <details>
 <summary>🍎 <strong>macOS (Homebrew)</strong></summary>

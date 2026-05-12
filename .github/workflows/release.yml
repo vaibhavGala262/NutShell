@@ -1,0 +1,35 @@
+name: Release Linux Binary
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y gcc make libreadline-dev
+
+      - name: Build release binary
+        run: make release
+
+      - name: Package artifact
+        run: |
+          mkdir -p dist
+          ARCH="$(uname -m)"
+          cp bin/nutshell "dist/nutshell-linux-${ARCH}"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/nutshell-linux-*

@@ -3,7 +3,7 @@ Makefile
 README.md
 bin
 include
-ls.txt
 obj
-src
 tests
+file.txt
+src
